@@ -1,23 +1,19 @@
 import cv2  # Import the OpenCV library
 
-# Load class names from coco.names file into a list
 classNames = []  # Initialize an empty list for class names
 classFile = "/home/pi/Object_Detection_Files/coco.names"  # Path to the coco.names file
 with open(classFile, "rt") as f:  # Open the file in read mode
     classNames = f.read().rstrip("\n").split("\n")  # Read class names and split into a list
 
-# Paths to the configuration and weights files for the SSD MobileNet model
 configPath = "/home/pi/Object_Detection_Files/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"  # Path to the model config file
 weightsPath = "/home/pi/Object_Detection_Files/frozen_inference_graph.pb"  # Path to the model weights file
 
-# Initialize the DNN model for object detection using the config and weights files
 net = cv2.dnn_DetectionModel(weightsPath, configPath)  # Load the DNN model
 net.setInputSize(320, 320)  # Set the input size for the model
 net.setInputScale(1.0 / 127.5)  # Set the input scale for the model
 net.setInputMean((127.5, 127.5, 127.5))  # Set the mean values for input
 net.setInputSwapRB(True)  # Swap the Red and Blue channels in the input image
 
-# Define the class index for the door
 DOOR_CLASS_INDEX = 71  # The index for the "door" class in the model
 
 # Function to detect the state of the door (open or closed)
