@@ -1,13 +1,10 @@
 import cv2
 import time
-
-# Load class names from coco.names file into a list
 classNames = []
 classFile = "/home/pi/Object_Detection_Files/coco.names"
 with open(classFile, "rt") as f:
     classNames = f.read().rstrip("\n").split("\n")
 
-# Find the index of "door"
 try:
     door_index = classNames.index("door")  # Get the index of "door" from class names
     DOOR_CLASS_INDEX = door_index  # Assign the index to DOOR_CLASS_INDEX
@@ -15,18 +12,15 @@ except ValueError:
     print("The class 'door' is not found in coco.names.")  # Print error if "door" is not found
     exit()  # Exit the program if "door" is not found
 
-# Paths to the configuration and weights files for the SSD MobileNet model
 configPath = "/home/pi/Object_Detection_Files/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
 weightsPath = "/home/pi/Object_Detection_Files/frozen_inference_graph.pb"
 
-# Initialize the DNN model for object detection using the config and weights files
 net = cv2.dnn_DetectionModel(weightsPath, configPath)
 net.setInputSize(320, 320)  # Set the input size for the model
 net.setInputScale(1.0 / 127.5)  # Set the input scale for the model
 net.setInputMean((127.5, 127.5, 127.5))  # Set the mean values for input
 net.setInputSwapRB(True)  # Swap the Red and Blue channels in the input image
 
-# Variables to track door state and time
 door_state = "Unknown"  # Initialize door state as unknown
 door_open_time = None  # Initialize door open time as None
 alert_threshold = 120  # 2 minutes in seconds for the alert threshold
